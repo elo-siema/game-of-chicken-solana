@@ -41,6 +41,7 @@ pub mod chicken {
         gda.entry_amount = amount;
         gda.accepted_at = None;
         gda.withdrawn_at = None;
+        gda.initializer = *ctx.accounts.player1.key;
 
         
 
@@ -72,10 +73,10 @@ pub mod chicken {
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
-    #[account(init, payer = player1)]
+    #[account(init, payer = player1, space = 64+64+64+64+64+8+8+64)]
     pub game_data_account: Account<'info, GameDataAccount>,
-    #[account(mut)]
-    pub player1: Signer<'info>,
+    #[account(mut, signer)]
+    pub player1: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
 }
@@ -99,6 +100,7 @@ pub struct GameDataAccount {
     pub end_timestamp: i64,
     //Required entry from players
     pub entry_amount: u64,
+    pub initializer: Pubkey,
 
     //When player 2 joined the game
     pub accepted_at: Option<i64>,

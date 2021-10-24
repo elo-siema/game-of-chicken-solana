@@ -9,4 +9,4 @@ cluster = "localnet"
 wallet = "/home/work/.config/solana/id.json"
 
 [scripts]
-test = "mocha -t 1000000 tests/"
+test = "mocha --require ts-node/register ./tests/*.ts --timeout 300000"

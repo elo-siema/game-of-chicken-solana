@@ -13,7 +13,6 @@ describe('chicken', () => {
 
   it('Is initialized!', async () => {
     // Add your test here.
-
       const gameDataAccount = anchor.web3.Keypair.generate();
       const tx = await program.rpc.initialize(
         new anchor.BN(2635114651), 
@@ -26,8 +25,9 @@ describe('chicken', () => {
           systemProgram: SystemProgram.programId,
           tokenProgram: spl.TOKEN_PROGRAM_ID
         },
-        signers: [gameDataAccount],
+        signers: []
       });
+
     console.log("Your transaction signature", tx);
   });
   /*
