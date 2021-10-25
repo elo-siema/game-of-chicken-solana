@@ -41,7 +41,7 @@ pub mod chicken {
         gda.entry_amount = amount;
         gda.accepted_at = None;
         gda.withdrawn_at = None;
-        gda.initializer = *ctx.accounts.player1.key;
+        gda.initializer = *ctx.accounts.player.key;
 
         
 
@@ -50,9 +50,9 @@ pub mod chicken {
             CpiContext::new(
                 ctx.accounts.token_program.to_account_info(),
                 anchor_spl::token::Transfer {
-                    from: ctx.accounts.player1.to_account_info(),
+                    from: ctx.accounts.player.to_account_info(),
                     to: ctx.accounts.game_data_account.to_account_info(),
-                    authority: ctx.accounts.player1.to_account_info(),
+                    authority: ctx.accounts.player.to_account_info(),
                 },
             ),
             amount,
@@ -73,11 +73,13 @@ pub mod chicken {
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
-    #[account(init, payer = player1, space = 64+64+64+64+64+8+8+64)]
+    #[account(init, signer, payer = player, space = 64+64+64+64+64+8+8+64)]
     pub game_data_account: Account<'info, GameDataAccount>,
     #[account(mut, signer)]
-    pub player1: AccountInfo<'info>,
+    pub player: AccountInfo<'info>,
+    #[account()]
     pub system_program: Program<'info, System>,
+    #[account()]
     pub token_program: Program<'info, Token>,
 }
 

@@ -1,31 +1,32 @@
 const anchor = require('@project-serum/anchor');
+import {Provider, web3, setProvider, Wallet, BN, workspace} from '@project-serum/anchor';
 const assert = require("assert");
-const { SystemProgram } = anchor.web3;
+const { SystemProgram } = web3;
 const spl = require('@solana/spl-token');
 
 describe('chicken', () => {
 
   // Configure the client to use the local cluster.
-  const provider = anchor.Provider.env();
-  anchor.setProvider(provider);
+  const provider = Provider.env();
+  setProvider(provider);
 
-  const program = anchor.workspace.Chicken;
+  const program = workspace.Chicken;
 
   it('Is initialized!', async () => {
     // Add your test here.
-      const gameDataAccount = anchor.web3.Keypair.generate();
+      const gameDataAccount = web3.Keypair.generate();
       const tx = await program.rpc.initialize(
-        new anchor.BN(2635114651), 
-        new anchor.BN(2635214651), 
-        new anchor.BN(1), 
+        new BN(2635114651), 
+        new BN(2635214651), 
+        new BN(1), 
         {
         accounts: {
           gameDataAccount: gameDataAccount.publicKey,
-          player1: provider.wallet.publicKey,
+          player: provider.wallet.publicKey,
           systemProgram: SystemProgram.programId,
           tokenProgram: spl.TOKEN_PROGRAM_ID
         },
-        signers: []
+        signers: [gameDataAccount]
       });
 
     console.log("Your transaction signature", tx);
